@@ -268,7 +268,7 @@ export default function AIBox() {
                 <div 
                   className="h-64 flex items-center justify-center relative"
                   style={{
-                    backgroundImage: tool.bgImage ? `url(${tool.bgImage})` : 'linear-gradient(to right, #f472b6, #fbbf24)'; // 添加分号
+                    backgroundImage: tool.bgImage ? `url(${tool.bgImage})` : 'linear-gradient(to right, #f472b6, #fbbf24)'; //
                     backgroundSize: 'cover',
                     backgroundPosition: tool.bgImageCrop ? `${-tool.bgImageCrop.x}px ${-tool.bgImageCrop.y}px` : 'center',
                     backgroundRepeat: 'no-repeat',
