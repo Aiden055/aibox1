@@ -200,12 +200,15 @@ export default function Component() {
 
   const handleRemoveCategory = (index: number) => {
     setCategoriesWithTracking(prev => {
-      const newCategories
+      const newCategories = [...prev];
       newCategories.splice(index, 1);
       updateGeneratedCode(newCategories);
       return newCategories;
     });
   }
+
+  // Additional methods...
+}
 
   const handleUpdateCategory = (index: number, newTitle: string) => {
     setCategoriesWithTracking(prev => {
