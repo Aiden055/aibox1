@@ -15,14 +15,14 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import Cropper from 'react-easy-crop'
 import { Edit2, LogIn, UserPlus, LogOut, Edit, FileUp, Eye, Trash2, Plus, FileText, Image as ImageIcon, ChevronLeft, ChevronRight, Save, ArrowLeft, Check, X, Settings, Move, Code } from 'lucide-react'
-import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist'
+import pdfjs from 'pdfjs-dist'
 import LZString from 'lz-string'
 import { toast, Toaster } from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '@/lib/supabaseClient'
 
 // Set up the worker for PDF.js
-GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`
+pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`
 
 interface Tool {
   id: string
@@ -267,9 +267,9 @@ export default function AIBox() {
                 <div 
                   className="h-64 flex items-center justify-center relative"
                   style={{
-                    backgroundImage: tool.bgImage ? \`url(${tool.bgImage})\` : 'linear-gradient(to right, #f472b6, #fbbf24)',
+                    backgroundImage: tool.bgImage ? `url(${tool.bgImage})` : 'linear-gradient(to right, #f472b6, #fbbf24)',
                     backgroundSize: 'cover',
-                    backgroundPosition: tool.bgImageCrop ? \`${-tool.bgImageCrop.x}px ${-tool.bgImageCrop.y}px\` : 'center',
+                    backgroundPosition: tool.bgImageCrop ? `${-tool.bgImageCrop.x}px ${-tool.bgImageCrop.y}px` : 'center',
                     backgroundRepeat: 'no-repeat',
                   }}
                   onClick={() => window.open(tool.url, '_blank', 'noopener,noreferrer')}
@@ -502,7 +502,7 @@ export default function AIBox() {
     setShowFilePreviewDialog(true);
     
     if (file.type === 'application/pdf') {
-      const loadingTask = getDocument(file.url);
+      const loadingTask = pdfjs.getDocument(file.url);
       const doc = await loadingTask.promise;
       setPdfDocument(doc);
       setTotalPages(doc.numPages);
