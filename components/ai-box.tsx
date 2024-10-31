@@ -15,7 +15,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import Cropper from 'react-easy-crop'
 import { Edit2, LogIn, UserPlus, LogOut, Edit, FileUp, Eye, Trash2, Plus, FileText, Image as ImageIcon, ChevronLeft, ChevronRight, Save, ArrowLeft, Check, X, Settings, Move, Code } from 'lucide-react'
-import pdfjs from 'pdfjs-dist'
+import * as pdfjs from 'pdfjs-dist'
 import LZString from 'lz-string'
 import { toast, Toaster } from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -148,7 +148,7 @@ export default function Component() {
   const [selectedFile, setSelectedFile] = useState<ToolFile | null>(null)
   const [showFilePreviewDialog, setShowFilePreviewDialog] = useState(false)
   const [previewFile, setPreviewFile] = useState<ToolFile | null>(null)
-  const [pdfDocument, setPdfDocument] = useState(null);
+  const [pdfDocument, setPdfDocument] = useState<pdfjs.PDFDocumentProxy | null>(null);
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -200,7 +200,7 @@ export default function Component() {
 
   const handleRemoveCategory = (index: number) => {
     setCategoriesWithTracking(prev => {
-      const newCategories = [...prev];
+      const newCategories
       newCategories.splice(index, 1);
       updateGeneratedCode(newCategories);
       return newCategories;
