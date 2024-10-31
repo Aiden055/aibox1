@@ -1,6 +1,7 @@
-import { NextConfig } from 'next';
+const path = require('path');
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
     remotePatterns: [
       {
@@ -10,16 +11,11 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // 其他配置项...
-};
-
-export default nextConfig;
-
-const path = require('path');
-
-module.exports = {
   webpack: (config) => {
     config.resolve.alias['@'] = path.resolve(__dirname);
     return config;
   },
+  // 其他配置项...
 };
+
+module.exports = nextConfig;
