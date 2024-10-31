@@ -1,4 +1,5 @@
 "use client";
+
 // Updated import statement for pdfjs
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 import type { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
