@@ -1,5 +1,18 @@
-'use client'
+// Updated import statement for pdfjs
+import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
+import type { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
 
+// Set up the worker for PDF.js
+GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`;
+
+// Update usage of PDFDocumentProxy and loading PDF document
+const loadPdfDocument = async (url: string) => {
+  const loadingTask = getDocument(url);
+  const doc = await loadingTask.promise;
+  setPdfDocument(doc as PDFDocumentProxy);
+};
+
+// Original component code
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Card, CardContent } from "@/components/ui/card"
@@ -15,14 +28,10 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import Cropper from 'react-easy-crop'
 import { Edit2, LogIn, UserPlus, LogOut, Edit, FileUp, Eye, Trash2, Plus, FileText, Image as ImageIcon, ChevronLeft, ChevronRight, Save, ArrowLeft, Check, X, Settings, Move, Code } from 'lucide-react'
-import * as pdfjs from 'pdfjs-dist/legacy/build/pdf'
 import LZString from 'lz-string'
 import { toast, Toaster } from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '@/lib/supabaseClient'
-
-// Set up the worker for PDF.js
-pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`
 
 interface Tool {
   id: string
@@ -148,7 +157,7 @@ export default function Component() {
   const [selectedFile, setSelectedFile] = useState<ToolFile | null>(null)
   const [showFilePreviewDialog, setShowFilePreviewDialog] = useState(false)
   const [previewFile, setPreviewFile] = useState<ToolFile | null>(null)
-  const [pdfDocument, setPdfDocument] = useState<pdfjs.PDFDocumentProxy | null>(null)
+  const [pdfDocument, setPdfDocument] = useState<PDFDocumentProxy | null>(null);
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
