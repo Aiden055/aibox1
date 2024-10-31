@@ -15,14 +15,14 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import Cropper from 'react-easy-crop'
 import { Edit2, LogIn, UserPlus, LogOut, Edit, FileUp, Eye, Trash2, Plus, FileText, Image as ImageIcon, ChevronLeft, ChevronRight, Save, ArrowLeft, Check, X, Settings, Move, Code } from 'lucide-react'
-import * as pdfjs from 'pdfjs-dist'
+import { getDocument, GlobalWorkerOptions, PDFDocumentProxy } from 'pdfjs-dist'
 import LZString from 'lz-string'
 import { toast, Toaster } from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '@/lib/supabaseClient'
 
 // Set up the worker for PDF.js
-pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`
+GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`
 
 interface Tool {
   id: string
@@ -129,9 +129,7 @@ export default function Component() {
   const [headerImageCropComplete, setHeaderImageCropComplete] = useState<Area>({ x: 0, y: 0, width: 100, height: 100 })
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [tempHeaderImage, setTempHeaderImage] = useState<string | null>(null)
-  const [isHeaderImageCropping, setIsHeaderImageCropping] = useState(false)
-  const [currentEditingTool, setCurrentEditingTool] = useState<{ categoryIndex: number; toolIndex: number } | null>(null)
-  const [tempToolImage, setTempToolImage] = useState<string | null>(null)
+  const [isHeaderImage, setTempToolImage] = useState<string | null>(null)
   const [imageAdjustmentMode, setImageAdjustmentMode] = useState<{ categoryIndex: number; toolIndex: number } | null>(null)
   const [users, setUsers] = useState<User[]>(initialUsers)
   const [currentUser, setCurrentUser] = useState<User | null>(null)
