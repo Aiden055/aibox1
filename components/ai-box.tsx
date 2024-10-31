@@ -1,20 +1,5 @@
-"use client";
+'use client'
 
-// Updated import statement for pdfjs
-import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
-import type { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
-
-// Set up the worker for PDF.js
-GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`;
-
-// Update usage of PDFDocumentProxy and loading PDF document
-const loadPdfDocument = async (url: string) => {
-  const loadingTask = getDocument(url);
-  const doc = await loadingTask.promise;
-  setPdfDocument(doc as PDFDocumentProxy);
-};
-
-// Original component code
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Card, CardContent } from "@/components/ui/card"
@@ -30,10 +15,14 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import Cropper from 'react-easy-crop'
 import { Edit2, LogIn, UserPlus, LogOut, Edit, FileUp, Eye, Trash2, Plus, FileText, Image as ImageIcon, ChevronLeft, ChevronRight, Save, ArrowLeft, Check, X, Settings, Move, Code } from 'lucide-react'
+import { getDocument } from 'pdfjs-dist'
 import LZString from 'lz-string'
 import { toast, Toaster } from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '@/lib/supabaseClient'
+
+// Set up the worker for PDF.js
+pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`
 
 interface Tool {
   id: string
@@ -159,7 +148,7 @@ export default function Component() {
   const [selectedFile, setSelectedFile] = useState<ToolFile | null>(null)
   const [showFilePreviewDialog, setShowFilePreviewDialog] = useState(false)
   const [previewFile, setPreviewFile] = useState<ToolFile | null>(null)
-  const [pdfDocument, setPdfDocument] = useState<PDFDocumentProxy | null>(null);
+  const [pdfDocument, setPdfDocument] = useState(null);
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -278,9 +267,9 @@ export default function AIBox() {
                 <div 
                   className="h-64 flex items-center justify-center relative"
                   style={{
-                    backgroundImage: tool.bgImage ? \`url(\${tool.bgImage})\` : 'linear-gradient(to right, #f472b6, #fbbf24)',
+                    backgroundImage: tool.bgImage ? \`url(${tool.bgImage})\` : 'linear-gradient(to right, #f472b6, #fbbf24)',
                     backgroundSize: 'cover',
-                    backgroundPosition: tool.bgImageCrop ? \`\${-tool.bgImageCrop.x}px \${-tool.bgImageCrop.y}px\` : 'center',
+                    backgroundPosition: tool.bgImageCrop ? \`${-tool.bgImageCrop.x}px ${-tool.bgImageCrop.y}px\` : 'center',
                     backgroundRepeat: 'no-repeat',
                   }}
                   onClick={() => window.open(tool.url, '_blank', 'noopener,noreferrer')}
@@ -513,7 +502,10 @@ export default function AIBox() {
     setShowFilePreviewDialog(true);
     
     if (file.type === 'application/pdf') {
-      window.open(file.url, '_blank');
+      const loadingTask = getDocument(file.url);
+      const doc = await loadingTask.promise;
+      setPdfDocument(doc);
+      setTotalPages(doc.numPages);
     } else if (file.type.startsWith('image/')) {
       // 图片预览保持不变
     } else {
