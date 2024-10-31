@@ -15,14 +15,14 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import Cropper from 'react-easy-crop'
 import { Edit2, LogIn, UserPlus, LogOut, Edit, FileUp, Eye, Trash2, Plus, FileText, Image as ImageIcon, ChevronLeft, ChevronRight, Save, ArrowLeft, Check, X, Settings, Move, Code } from 'lucide-react'
-import { getDocument } from 'pdfjs-dist'
+import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist'
 import LZString from 'lz-string'
 import { toast, Toaster } from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '@/lib/supabaseClient'
 
 // Set up the worker for PDF.js
-pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`
+GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`
 
 interface Tool {
   id: string
@@ -980,7 +980,7 @@ export default function AIBox() {
                               </Button>
                             </div>
                           )}
-                        </div>
+                        </div
                         <CardContent className="p-0">
                           {editMode ? (
                             <Tabs defaultValue="general">
